@@ -3,7 +3,7 @@ package com.example.personal_accounting.controllers;
 import com.example.personal_accounting.configs.JwtRequestFilter;
 import com.example.personal_accounting.dto.Account.AccountDto;
 import com.example.personal_accounting.dto.Account.CreateAccountDto;
-import com.example.personal_accounting.services.AccountService;
+import com.example.personal_accounting.services.Accounts.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
