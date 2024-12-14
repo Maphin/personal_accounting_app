@@ -12,7 +12,8 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({AccountAlreadyExistsException.class, InvalidLoginCredentials.class, UserAlreadyExistsException.class,
-            UserNotFoundException.class, WithdrawalAmountInvalidException.class, InsufficientBalanceException.class})
+            UserNotFoundException.class, WithdrawalAmountInvalidException.class, InsufficientBalanceException.class, CategoryNotFoundException.class,
+            TransactionNotFoundException.class})
     public ResponseEntity<Map<String, Object>> handleCustomExceptions(RuntimeException ex) {
         Map<String, Object> response = new HashMap<>();
         response.put("message", ex.getMessage());
