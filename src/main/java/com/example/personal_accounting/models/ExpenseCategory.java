@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity(name = "expense_categories")
-@Data
+@Data()
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExpenseCategory implements Cloneable {
@@ -16,11 +15,11 @@ public class ExpenseCategory implements Cloneable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false, updatable = false)
-    private Instant createdAt = Instant.now();
+    private LocalDateTime createdAt = LocalDateTime.now();
     @Override
     public ExpenseCategory clone() {
         try {
