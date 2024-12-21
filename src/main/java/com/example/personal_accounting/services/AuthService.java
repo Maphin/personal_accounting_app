@@ -3,11 +3,12 @@ package com.example.personal_accounting.services;
 import com.example.personal_accounting.dto.User.CreateUserDto;
 import com.example.personal_accounting.dto.JwtRequest;
 import com.example.personal_accounting.dto.JwtResponse;
-import com.example.personal_accounting.exceptions.InvalidLoginCredentials;
-import com.example.personal_accounting.exceptions.UserAlreadyExistsException;
+import com.example.personal_accounting.dto.User.UserDto;
+import com.example.personal_accounting.utils.exceptions.InvalidLoginCredentials;
+import com.example.personal_accounting.utils.exceptions.UserAlreadyExistsException;
 import com.example.personal_accounting.models.User;
+import com.example.personal_accounting.utils.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,11 +37,11 @@ public class AuthService {
         String token = jwtService.generateToken(user.getId(), user.getUsername());
         return ResponseEntity.ok(new JwtResponse(token));
     }
-    public ResponseEntity<User> createUser(@RequestBody CreateUserDto userDto) {
+    public UserDto createUser(@RequestBody CreateUserDto userDto) {
         if (userService.findByUsername(userDto.getUsername()).isPresent()) {
             throw new UserAlreadyExistsException("User with the specified username already exists");
         }
         User user = userService.createUser(userDto);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+        return UserMapper.toDto(user);
     }
 }

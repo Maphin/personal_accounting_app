@@ -1,4 +1,4 @@
-package com.example.personal_accounting.exceptions;
+package com.example.personal_accounting.utils.exceptions;
 
 import lombok.Data;
 
