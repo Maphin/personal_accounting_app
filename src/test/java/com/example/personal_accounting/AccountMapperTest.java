@@ -1,14 +1,15 @@
 package com.example.personal_accounting;
 
 import com.example.personal_accounting.dto.Account.AccountDto;
-import com.example.personal_accounting.mappers.AccountMapper;
+import com.example.personal_accounting.utils.mappers.AccountMapper;
 import com.example.personal_accounting.models.Account;
 import com.example.personal_accounting.models.User;
 import com.example.personal_accounting.types.Currency;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,15 +26,15 @@ public class AccountMapperTest {
 
         Account account = new Account();
         account.setId(101L);
-        account.setName("Savings");
-        account.setBalance(1000.0);
+        account.setTitle("Savings");
+        account.setBalance(BigDecimal.valueOf(1000.0));
         account.setCurrency(Currency.USD);
         account.setUser(user);
 
-        AccountDto dto = accountMapper.toDto(account);
+        AccountDto dto = AccountMapper.toDto(account);
 
         assertEquals(account.getId(), dto.getId());
-        assertEquals(account.getName(), dto.getName());
+        assertEquals(account.getTitle(), dto.getTitle());
         assertEquals(account.getBalance(), dto.getBalance());
         assertEquals(account.getCurrency(), dto.getCurrency());
         assertEquals(account.getUser().getId(), dto.getUser().getId());

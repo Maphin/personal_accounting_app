@@ -2,9 +2,10 @@ package com.example.personal_accounting.services.Accounts;
 
 import com.example.personal_accounting.dto.Account.AccountDto;
 import com.example.personal_accounting.dto.Account.CreateAccountDto;
-import com.example.personal_accounting.exceptions.AccountAlreadyExistsException;
-import com.example.personal_accounting.exceptions.UserNotFoundException;
-import com.example.personal_accounting.mappers.AccountMapper;
+import com.example.personal_accounting.types.Currency;
+import com.example.personal_accounting.utils.exceptions.AccountAlreadyExistsException;
+import com.example.personal_accounting.utils.exceptions.UserNotFoundException;
+import com.example.personal_accounting.utils.mappers.AccountMapper;
 import com.example.personal_accounting.models.Account;
 import com.example.personal_accounting.models.User;
 import com.example.personal_accounting.repository.AccountRepository;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,45 +29,59 @@ public class AccountService {
 
     @Transactional
     public AccountDto create(CreateAccountDto accountDto, Long userId) {
-        User user = userService.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User not found with ID: " + userId));
+        User user = userService.findById(userId);
 
-        if (accountRepository.existsByUserAndName(user, accountDto.getTitle())) {
+        if (accountRepository.existsByUserAndTitle(user, accountDto.getTitle())) {
             throw new AccountAlreadyExistsException("Account with name '" + accountDto.getTitle() + "' already exists for this user.");
         }
 
         Account account = new Account();
         account.setTitle(accountDto.getTitle());
         account.setBalance(accountDto.getBalance());
-        account.setCurrency(accountDto.getCurrency());
-        //account.setCardLimit(accountDto.getCardLimit());
+        account.setCurrency(Currency.valueOf(accountDto.getCurrency()));
         account.setUser(user);
 
-        accountRepository.save(account);
+        save(account);
         return AccountMapper.toDto(account);
     }
 
-    public void withdraw(Long accountId, Double amount) throws AccountNotFoundException {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
-
-        account.withdraw(amount, accountStateFactory);
-        accountRepository.save(account);
+    public List<Account> getAll() {
+        return accountRepository.findAll();
     }
 
-    public void deposit(Long accountId, Double amount) throws AccountNotFoundException {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
+    public List<Account> getUserAccounts(Long userId) {
+        return accountRepository.findAllByUserId(userId);
+    }
 
-        account.deposit(amount, accountStateFactory);
+    public Account getById(Long accountId) throws AccountNotFoundException {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
+    }
+
+    public void save(Account account) {
         accountRepository.save(account);
+    }
+    @Transactional
+    public void delete(Long accountId) throws AccountNotFoundException {
+        Account account = getById(accountId);
+        accountRepository.delete(account);
+    }
+
+    public void withdraw(Long accountId, BigDecimal amount) throws AccountNotFoundException {
+        Account account = getById(accountId);
+        account.withdraw(amount, accountStateFactory);
+        save(account);
+    }
+
+    public void deposit(Long accountId, BigDecimal amount) throws AccountNotFoundException {
+        Account account = getById(accountId);
+        account.deposit(amount, accountStateFactory);
+        save(account);
     }
 
     public void closeAccount(Long accountId) throws AccountNotFoundException {
-        Account account = accountRepository.findById(accountId)
-                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
-
+        Account account = getById(accountId);
         account.close(accountStateFactory);
-        accountRepository.save(account);
+        save(account);
     }
 }

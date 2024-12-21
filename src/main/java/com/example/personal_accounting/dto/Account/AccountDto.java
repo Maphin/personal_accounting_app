@@ -4,14 +4,15 @@ import com.example.personal_accounting.dto.User.UserDto;
 import com.example.personal_accounting.types.Currency;
 import lombok.Data;
 
-import java.time.Instant;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 public class AccountDto {
     private Long id;
     private String title;
-    private Double balance;
+    private BigDecimal balance;
     private Currency currency;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
     private UserDto user;
 }
