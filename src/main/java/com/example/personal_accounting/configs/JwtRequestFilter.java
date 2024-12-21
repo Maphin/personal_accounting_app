@@ -27,7 +27,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String username = null;
         Long userId = null;
-        String jwt = null;
+        String jwt;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             try {
@@ -54,7 +54,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     public record CustomUserPrincipal(String username, Long userId) {
-
         @Override
             public String toString() {
                 return "CustomUserPrincipal{" +
