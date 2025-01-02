@@ -3,11 +3,9 @@ package com.example.personal_accounting.models;
 import com.example.personal_accounting.services.Accounts.State.AccountState;
 import com.example.personal_accounting.services.Accounts.State.AccountStateFactory;
 import com.example.personal_accounting.types.AccountStatus;
-import com.example.personal_accounting.types.Currency;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -30,16 +28,19 @@ public class Account {
     @Column(nullable = false)
     private BigDecimal balance = BigDecimal.valueOf(0.0);
 
-    @Column(nullable = false, length = 3)
-    @Enumerated(EnumType.STRING)
-    private Currency currency;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AccountStatus state = AccountStatus.ACTIVE; // ACTIVE, SUSPENDED, CLOSED
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column()
+    private LocalDateTime updatedAt;
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public void withdraw(BigDecimal amount, AccountStateFactory stateFactory) {
         AccountState stateHandler = stateFactory.getState(this.state);

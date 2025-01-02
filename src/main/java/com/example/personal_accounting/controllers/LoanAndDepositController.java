@@ -3,8 +3,9 @@ package com.example.personal_accounting.controllers;
 import com.example.personal_accounting.configs.JwtRequestFilter;
 import com.example.personal_accounting.dto.LoanAndDeposit.CreateLoanAndDepositDto;
 import com.example.personal_accounting.dto.LoanAndDeposit.LoanAndDepositDto;
-import com.example.personal_accounting.dto.LoanAndDeposit.UpdateLoanAndDepositDto;
+import com.example.personal_accounting.dto.LoanAndDeposit.PartialUpdateLoanAndDepositDto;
 import com.example.personal_accounting.services.LoanAndDeposit.LoanAndDepositService;
+import com.example.personal_accounting.utils.validators.PositiveId;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -32,7 +34,7 @@ public class LoanAndDepositController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LoanAndDepositDto> getLoanOrDeposit(@PathVariable Long id) {
+    public ResponseEntity<LoanAndDepositDto> getLoanOrDeposit(@PathVariable @PositiveId Long id) {
         LoanAndDepositDto loanOrDeposit = loanAndDepositService.getById(id);
         return new ResponseEntity<>(loanOrDeposit, HttpStatus.OK);
     }
@@ -47,17 +49,23 @@ public class LoanAndDepositController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<LoanAndDepositDto> updateLoanOrDeposit(
-            @PathVariable Long id,
-            @RequestBody @Valid UpdateLoanAndDepositDto dto
+    public ResponseEntity<LoanAndDepositDto> partialUpdateLoanOrDeposit(
+            @PathVariable @PositiveId Long id,
+            @RequestBody @Valid PartialUpdateLoanAndDepositDto dto
     ) {
         LoanAndDepositDto updatedLoanOrDeposit = loanAndDepositService.update(id, dto);
         return new ResponseEntity<>(updatedLoanOrDeposit, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteLoanOrDeposit(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteLoanOrDeposit(@PathVariable @PositiveId Long id) {
         loanAndDepositService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{id}/calculate")
+    public ResponseEntity<BigDecimal> calculateTotalAmount(@PathVariable Long id) {
+        BigDecimal totalAmount = loanAndDepositService.calculateTotalAmount(id);
+        return ResponseEntity.ok(totalAmount);
     }
 }

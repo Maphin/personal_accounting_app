@@ -1,4 +1,4 @@
-package com.example.personal_accounting.services.Statistics.Bridge;
+package com.example.personal_accounting.services.Statistics.Transaction.Bridge;
 
 import com.example.personal_accounting.repository.TransactionRepository;
 import com.example.personal_accounting.types.TransactionType;
@@ -14,7 +14,7 @@ public class DatabaseTransactionStatisticsImplementation implements TransactionS
         this.transactionRepository = transactionRepository;
     }
     @Override
-    public BigDecimal calculateTotalByType(TransactionType type, LocalDate startDate, LocalDate endDate) {
-        return transactionRepository.calculateTotalAmountByTypeAndDateRange(type, startDate, endDate);
+    public BigDecimal calculateTotalByTypeAndAccount(TransactionType type, LocalDate startDate, LocalDate endDate, Long accountId) {
+        return transactionRepository.calculateTotalAmountByTypeAndDateRangeAndAccount(type, startDate, endDate, accountId);
     }
 }

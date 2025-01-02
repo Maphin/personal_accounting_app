@@ -17,16 +17,11 @@ public class AccountStateFactory {
     }
 
     public AccountState getState(AccountStatus status) {
-        switch (status) {
-            case ACTIVE:
-                return activeState;
-            case SUSPENDED:
-                return suspendedState;
-            case CLOSED:
-                return closedState;
-            default:
-                throw new IllegalArgumentException("Unknown account state: " + status);
-        }
+        return switch (status) {
+            case ACTIVE -> activeState;
+            case SUSPENDED -> suspendedState;
+            case CLOSED -> closedState;
+        };
     }
 }
 

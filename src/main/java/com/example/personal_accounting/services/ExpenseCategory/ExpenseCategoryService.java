@@ -2,6 +2,7 @@ package com.example.personal_accounting.services.ExpenseCategory;
 
 import com.example.personal_accounting.models.ExpenseCategory;
 import com.example.personal_accounting.repository.ExpenseCategoryRepository;
+import com.example.personal_accounting.repository.TransactionRepository;
 import com.example.personal_accounting.utils.exceptions.CategoryNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpenseCategoryService {
     private final ExpenseCategoryRepository expenseCategoryRepository;
+    private final TransactionRepository transactionRepository;
     public ExpenseCategory cloneCategory(Long categoryId, String newName) {
         ExpenseCategory originalCategory = getCategoryById(categoryId);
         ExpenseCategory clonedCategory = originalCategory.clone();
@@ -41,5 +43,14 @@ public class ExpenseCategoryService {
     public ExpenseCategory getCategoryByName(String name) {
         return expenseCategoryRepository.findByName(name)
                 .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+    }
+    public void deleteCategory(Long id) {
+        ExpenseCategory category = getCategoryById(id);
+
+        if (transactionRepository.existsByExpenseCategory(category)) {
+            throw new IllegalStateException("Cannot delete category because it is used in transactions.");
+        }
+
+        this.expenseCategoryRepository.deleteById(id);
     }
 }

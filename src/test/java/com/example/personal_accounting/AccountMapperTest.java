@@ -4,7 +4,6 @@ import com.example.personal_accounting.dto.Account.AccountDto;
 import com.example.personal_accounting.utils.mappers.AccountMapper;
 import com.example.personal_accounting.models.Account;
 import com.example.personal_accounting.models.User;
-import com.example.personal_accounting.types.Currency;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +27,6 @@ public class AccountMapperTest {
         account.setId(101L);
         account.setTitle("Savings");
         account.setBalance(BigDecimal.valueOf(1000.0));
-        account.setCurrency(Currency.USD);
         account.setUser(user);
 
         AccountDto dto = AccountMapper.toDto(account);
@@ -36,7 +34,6 @@ public class AccountMapperTest {
         assertEquals(account.getId(), dto.getId());
         assertEquals(account.getTitle(), dto.getTitle());
         assertEquals(account.getBalance(), dto.getBalance());
-        assertEquals(account.getCurrency(), dto.getCurrency());
         assertEquals(account.getUser().getId(), dto.getUser().getId());
         assertEquals(account.getUser().getUsername(), dto.getUser().getUsername());
     }

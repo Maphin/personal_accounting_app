@@ -40,7 +40,7 @@ public class Transaction {
     private LocalDate transactionDate;
 
     @Column()
-    private boolean isPeriodic;
+    private Boolean isPeriodic;
 
     @Column()
     private Integer repeatInterval; // in days

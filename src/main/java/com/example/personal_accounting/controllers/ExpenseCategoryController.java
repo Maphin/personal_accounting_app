@@ -3,6 +3,7 @@ package com.example.personal_accounting.controllers;
 import com.example.personal_accounting.dto.ExpenseCategory.CreateExpenseCategoryDto;
 import com.example.personal_accounting.models.ExpenseCategory;
 import com.example.personal_accounting.services.ExpenseCategory.ExpenseCategoryService;
+import com.example.personal_accounting.utils.validators.PositiveId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +32,11 @@ public class ExpenseCategoryController {
     public ResponseEntity<List<ExpenseCategory>> getAllCategories() {
         List<ExpenseCategory> categories = expenseCategoryService.getAll();
         return ResponseEntity.status(HttpStatus.OK).body(categories);
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable @PositiveId Long id) {
+        expenseCategoryService.deleteCategory(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

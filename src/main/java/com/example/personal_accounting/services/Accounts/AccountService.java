@@ -2,9 +2,7 @@ package com.example.personal_accounting.services.Accounts;
 
 import com.example.personal_accounting.dto.Account.AccountDto;
 import com.example.personal_accounting.dto.Account.CreateAccountDto;
-import com.example.personal_accounting.types.Currency;
 import com.example.personal_accounting.utils.exceptions.AccountAlreadyExistsException;
-import com.example.personal_accounting.utils.exceptions.UserNotFoundException;
 import com.example.personal_accounting.utils.mappers.AccountMapper;
 import com.example.personal_accounting.models.Account;
 import com.example.personal_accounting.models.User;
@@ -38,7 +36,6 @@ public class AccountService {
         Account account = new Account();
         account.setTitle(accountDto.getTitle());
         account.setBalance(accountDto.getBalance());
-        account.setCurrency(Currency.valueOf(accountDto.getCurrency()));
         account.setUser(user);
 
         save(account);

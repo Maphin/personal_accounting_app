@@ -17,7 +17,6 @@ public class AccountMapper {
         accountDto.setId(account.getId());
         accountDto.setTitle(account.getTitle());
         accountDto.setBalance(account.getBalance());
-        accountDto.setCurrency(account.getCurrency());
         accountDto.setCreatedAt(account.getCreatedAt());
 
         // Map User entity to UserDto
@@ -40,7 +39,6 @@ public class AccountMapper {
         account.setId(accountDto.getId());
         account.setTitle(accountDto.getTitle());
         account.setBalance(accountDto.getBalance());
-        account.setCurrency(accountDto.getCurrency());
         account.setCreatedAt(accountDto.getCreatedAt());
 
         // You can set the User entity manually if needed

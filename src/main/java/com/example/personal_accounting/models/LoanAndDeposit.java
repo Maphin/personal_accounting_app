@@ -1,5 +1,7 @@
 package com.example.personal_accounting.models;
 
+import com.example.personal_accounting.models.Flyweight.LoanAndDepositFlyweight;
+import com.example.personal_accounting.models.Flyweight.LoanAndDepositFlyweightFactory;
 import com.example.personal_accounting.types.Type;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,6 +22,9 @@ public class LoanAndDeposit {
     @Column(nullable = false, unique = true)
     private String title;
 
+    @Transient
+    private LoanAndDepositFlyweight sharedData;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Type type;
@@ -35,4 +40,9 @@ public class LoanAndDeposit {
 
     @Column(nullable = false)
     private LocalDate endDate;
+
+    @PostLoad
+    public void loadSharedData() {
+        this.sharedData = LoanAndDepositFlyweightFactory.getFlyweight(type, principalAmount, interestRate);
+    }
 }

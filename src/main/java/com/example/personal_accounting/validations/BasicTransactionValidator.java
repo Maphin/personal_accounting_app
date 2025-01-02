@@ -1,11 +1,11 @@
 package com.example.personal_accounting.validations;
 
 import com.example.personal_accounting.dto.Transaction.CreateTransactionDto;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-@Component
+@Service
 public class BasicTransactionValidator implements TransactionValidator {
     @Override
     public void validate(CreateTransactionDto transactionDto) {

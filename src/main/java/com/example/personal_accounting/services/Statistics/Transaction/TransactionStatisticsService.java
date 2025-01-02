@@ -1,6 +1,10 @@
-package com.example.personal_accounting.services.Statistics;
+package com.example.personal_accounting.services.Statistics.Transaction;
 
+import com.example.personal_accounting.services.Statistics.Transaction.Bridge.DatabaseTransactionStatisticsImplementation;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Service
 public class TransactionStatisticsService {
@@ -11,11 +15,11 @@ public class TransactionStatisticsService {
         this.statistics = new MonthlyTransactionStatistics(implementation);
     }
 
-    public BigDecimal getTotalIncome(LocalDate startDate, LocalDate endDate) {
-        return statistics.calculateIncome(startDate, endDate);
+    public BigDecimal getTotalIncome(LocalDate startDate, LocalDate endDate, Long accountId) {
+        return statistics.calculateIncome(startDate, endDate, accountId);
     }
 
-    public BigDecimal getTotalExpenses(LocalDate startDate, LocalDate endDate) {
-        return statistics.calculateExpenses(startDate, endDate);
+    public BigDecimal getTotalExpenses(LocalDate startDate, LocalDate endDate, Long accountId) {
+        return statistics.calculateExpenses(startDate, endDate, accountId);
     }
 }
