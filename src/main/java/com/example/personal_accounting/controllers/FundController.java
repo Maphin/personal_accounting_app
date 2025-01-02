@@ -6,7 +6,9 @@ import com.example.personal_accounting.dto.Fund.CloseFundDto;
 import com.example.personal_accounting.dto.Fund.CreateFundDto;
 import com.example.personal_accounting.dto.Fund.FundDto;
 import com.example.personal_accounting.models.Fund;
+import com.example.personal_accounting.models.Transaction;
 import com.example.personal_accounting.services.Fund.FundService;
+import com.example.personal_accounting.services.Transactions.TransactionService;
 import com.example.personal_accounting.utils.exceptions.FundNotFoundException;
 import com.example.personal_accounting.utils.mappers.FundMapper;
 import com.example.personal_accounting.utils.validators.PositiveId;
@@ -28,6 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FundController {
     private final FundService fundService;
+    private final TransactionService transactionService;
 
     @PostMapping
     public ResponseEntity<FundDto> createFund(

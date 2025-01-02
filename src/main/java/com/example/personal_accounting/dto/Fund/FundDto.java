@@ -14,4 +14,5 @@ public class FundDto {
     private BigDecimal currentAmount;
     private BigDecimal goalAmount;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

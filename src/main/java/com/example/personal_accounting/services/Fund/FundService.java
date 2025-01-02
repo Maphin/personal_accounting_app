@@ -62,6 +62,15 @@ public class FundService {
     public List<Fund> getAllFundsByUserId(Long userId) {
         return fundRepository.findByUserId(userId);
     }
+    public List<Fund> getFundsByDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
+        return fundRepository.findFundsByUserIdAndDateRange(userId, startDate.atStartOfDay(), endDate.atStartOfDay());
+    }
+    public BigDecimal getTotalDeposits(Long userId, LocalDate startDate, LocalDate endDate) {
+        List<Fund> userFunds = getFundsByDateRange(userId, startDate, endDate);
+        return userFunds.stream()
+                .map(Fund::getCurrentAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
     @Transactional
     public FundDto addAmountToFund(Long fundId, BigDecimal amount, Long accountId, Long userId) throws AccountNotFoundException {
         Fund fund = getFundById(fundId);
