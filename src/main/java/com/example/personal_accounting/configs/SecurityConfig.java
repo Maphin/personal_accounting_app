@@ -47,11 +47,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request -> request
-//                        .requestMatchers("/auth/*").anonymous()
+                        .requestMatchers("/auth/*").anonymous()
 //                        .requestMatchers("/accounts/**").authenticated()
 //                        .requestMatchers(HttpMethod.GET, "**").permitAll()
 //                        .anyRequest().authenticated())
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

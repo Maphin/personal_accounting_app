@@ -1,10 +1,7 @@
 package com.example.personal_accounting.controllers;
 
 import com.example.personal_accounting.configs.JwtRequestFilter;
-import com.example.personal_accounting.dto.Fund.AddMoneyToFundDto;
-import com.example.personal_accounting.dto.Fund.CloseFundDto;
-import com.example.personal_accounting.dto.Fund.CreateFundDto;
-import com.example.personal_accounting.dto.Fund.FundDto;
+import com.example.personal_accounting.dto.Fund.*;
 import com.example.personal_accounting.models.Fund;
 import com.example.personal_accounting.models.Transaction;
 import com.example.personal_accounting.services.Fund.FundService;
@@ -71,6 +68,15 @@ public class FundController {
             @AuthenticationPrincipal JwtRequestFilter.CustomUserPrincipal principal) throws AccountNotFoundException {
         FundDto fund = fundService.addAmountToFund(id, dto.getAmount(), dto.getAccountId(), principal.userId());
         return new ResponseEntity<>(fund, HttpStatus.OK);
+    }
+    @PatchMapping("/{id}")
+    public ResponseEntity<FundDto> patchFund(
+            @PathVariable @PositiveId Long id,
+            @RequestBody UpdateFundDto dto,
+            @AuthenticationPrincipal JwtRequestFilter.CustomUserPrincipal principal) {
+        Long userId = principal.userId();
+        FundDto updatedFund = fundService.updateFund(id, dto, userId);
+        return new ResponseEntity<>(updatedFund, HttpStatus.OK);
     }
     @PostMapping("/{id}/close")
     public ResponseEntity<Void> closeFund(@PathVariable @PositiveId Long id,

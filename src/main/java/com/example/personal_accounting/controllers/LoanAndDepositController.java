@@ -4,6 +4,7 @@ import com.example.personal_accounting.configs.JwtRequestFilter;
 import com.example.personal_accounting.dto.LoanAndDeposit.CreateLoanAndDepositDto;
 import com.example.personal_accounting.dto.LoanAndDeposit.LoanAndDepositDto;
 import com.example.personal_accounting.dto.LoanAndDeposit.PartialUpdateLoanAndDepositDto;
+import com.example.personal_accounting.dto.LoanAndDeposit.TotalAmountDto;
 import com.example.personal_accounting.services.LoanAndDeposit.LoanAndDepositService;
 import com.example.personal_accounting.utils.validators.PositiveId;
 import jakarta.validation.Valid;
@@ -64,8 +65,8 @@ public class LoanAndDepositController {
     }
 
     @GetMapping("/{id}/calculate")
-    public ResponseEntity<BigDecimal> calculateTotalAmount(@PathVariable Long id) {
-        BigDecimal totalAmount = loanAndDepositService.calculateTotalAmount(id);
+    public ResponseEntity<TotalAmountDto> calculateTotalAmount(@PathVariable Long id) {
+        TotalAmountDto totalAmount = loanAndDepositService.calculateTotalAmount(id);
         return ResponseEntity.ok(totalAmount);
     }
 }

@@ -4,6 +4,7 @@ import com.example.personal_accounting.models.Receipt;
 import com.example.personal_accounting.models.Transaction;
 import com.example.personal_accounting.repository.ReceiptRepository;
 import com.example.personal_accounting.repository.TransactionRepository;
+import com.example.personal_accounting.utils.exceptions.ReceiptNotFoundException;
 import com.example.personal_accounting.utils.exceptions.TransactionNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -45,13 +46,27 @@ public class ReceiptService {
 
     public byte[] getReceiptFile(Long receiptId) {
         Receipt receipt = receiptRepository.findById(receiptId)
-                .orElseThrow(() -> new IllegalArgumentException("Receipt not found"));
+                .orElseThrow(() -> new ReceiptNotFoundException("Receipt not found"));
 
         try {
             return Files.readAllBytes(Paths.get(receipt.getPath()));
         } catch (IOException e) {
             throw new RuntimeException("Failed to read file", e);
         }
+    }
+
+    public void deleteReceipt(Long receiptId) {
+        Receipt receipt = receiptRepository.findById(receiptId)
+                .orElseThrow(() -> new ReceiptNotFoundException("Receipt not found"));
+
+        try {
+            Path filePath = Paths.get(receipt.getPath());
+            Files.delete(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete file", e);
+        }
+
+        receiptRepository.delete(receipt);
     }
 }
 

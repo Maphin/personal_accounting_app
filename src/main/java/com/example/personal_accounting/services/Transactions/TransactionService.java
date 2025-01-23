@@ -1,9 +1,7 @@
 package com.example.personal_accounting.services.Transactions;
 
 import com.example.personal_accounting.dto.Transaction.CreateTransactionDto;
-import com.example.personal_accounting.models.Fund;
 import com.example.personal_accounting.services.ExpenseCategory.ExpenseCategoryService;
-import com.example.personal_accounting.services.Fund.FundService;
 import com.example.personal_accounting.types.TransactionType;
 import com.example.personal_accounting.models.Account;
 import com.example.personal_accounting.models.Transaction;
@@ -12,7 +10,7 @@ import com.example.personal_accounting.repository.TransactionRepository;
 import com.example.personal_accounting.services.Accounts.AccountService;
 import com.example.personal_accounting.utils.CheckPermissions;
 import com.example.personal_accounting.utils.exceptions.TransactionNotFoundException;
-import com.example.personal_accounting.validations.TransactionValidator;
+import com.example.personal_accounting.utils.validators.Transaction.TransactionValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -55,13 +53,16 @@ public class TransactionService {
         transaction.setTransactionType(transactionType);
         transaction.setDescription(transactionDto.getDescription());
         transaction.setTransactionDate(transactionDto.getTransactionDate());
-        transaction.setIsPeriodic(transactionDto.isPeriodic());
-        transaction.setRepeatInterval(transactionDto.getRepeatInterval());
         transaction.setCreatedAt(LocalDateTime.now());
         transaction.setUpdatedAt(LocalDateTime.now());
 
+        transaction.setIsPeriodic(transactionDto.getIsPeriodic());
+        transaction.setRepeatInterval(transactionDto.getIsPeriodic() ? transactionDto.getRepeatInterval() : null);
+
         return transactionRepository.save(transaction);
     }
+
+
 
     @Transactional
     public void processPeriodicTransactions() {

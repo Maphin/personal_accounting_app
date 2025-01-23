@@ -2,6 +2,7 @@ package com.example.personal_accounting.services.Fund;
 
 import com.example.personal_accounting.dto.Fund.CreateFundDto;
 import com.example.personal_accounting.dto.Fund.FundDto;
+import com.example.personal_accounting.dto.Fund.UpdateFundDto;
 import com.example.personal_accounting.dto.Transaction.CreateTransactionDto;
 import com.example.personal_accounting.models.ExpenseCategory;
 import com.example.personal_accounting.models.Fund;
@@ -84,6 +85,23 @@ public class FundService {
     }
 
     @Transactional
+    public FundDto updateFund(Long id, UpdateFundDto dto, Long userId) {
+        Fund fund = fundRepository.findById(id)
+                .orElseThrow(() -> new FundNotFoundException("Fund not found"));
+
+        CheckPermissions.checkPermissions(fund.getUser().getId(), userId, "You do not have permissions refactor to this fund");
+
+        if (dto.getTitle() != null) {
+            fund.setTitle(dto.getTitle());
+        }
+        if (dto.getGoalAmount() != null) {
+            fund.setGoalAmount(dto.getGoalAmount());
+        }
+
+        Fund updatedFund = fundRepository.save(fund);
+        return FundMapper.toDto(updatedFund);
+    }
+    @Transactional
     public void closeFund(Long fundId, Long accountId, Long userId) throws AccountNotFoundException {
         Fund fund = getFundById(fundId);
 
@@ -118,7 +136,7 @@ public class FundService {
         transactionDto.setTransactionType(transactionType.name());
         transactionDto.setDescription(description + fund.getTitle());
         transactionDto.setTransactionDate(LocalDate.now());
-        transactionDto.setPeriodic(false);
+        transactionDto.setIsPeriodic(false);
         transactionDto.setRepeatInterval(null);
 
         transactionService.createTransaction(transactionDto, userId);

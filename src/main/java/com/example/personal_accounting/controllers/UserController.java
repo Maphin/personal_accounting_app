@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
-
     @GetMapping("/my-profile")
     public ResponseEntity<UserDto> getMe(@AuthenticationPrincipal JwtRequestFilter.CustomUserPrincipal principal) {
         UserDto user = new UserDto();

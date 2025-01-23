@@ -19,7 +19,6 @@ public class AccountMapper {
         accountDto.setBalance(account.getBalance());
         accountDto.setCreatedAt(account.getCreatedAt());
 
-        // Map User entity to UserDto
         if (account.getUser() != null) {
             User user = account.getUser();
             UserDto userDto = new UserDto();
@@ -40,10 +39,6 @@ public class AccountMapper {
         account.setTitle(accountDto.getTitle());
         account.setBalance(accountDto.getBalance());
         account.setCreatedAt(accountDto.getCreatedAt());
-
-        // You can set the User entity manually if needed
-        // For example, setting the User from the principal or some other logic
-        // account.setUser(userEntity);
 
         return account;
     }

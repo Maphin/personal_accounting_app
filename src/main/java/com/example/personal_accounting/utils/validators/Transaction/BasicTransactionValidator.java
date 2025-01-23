@@ -1,4 +1,4 @@
-package com.example.personal_accounting.validations;
+package com.example.personal_accounting.utils.validators.Transaction;
 
 import com.example.personal_accounting.dto.Transaction.CreateTransactionDto;
 import org.springframework.stereotype.Service;

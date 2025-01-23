@@ -31,5 +31,11 @@ public class ReceiptController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(fileData);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteReceipt(@PathVariable Long id) {
+        receiptService.deleteReceipt(id);
+        return ResponseEntity.noContent().build();
+    }
 }
 

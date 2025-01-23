@@ -32,10 +32,10 @@ public class CreateTransactionDto {
     @PastOrPresent(message = "Transaction date cannot be in the future")
     private LocalDate transactionDate;
 
-    private boolean isPeriodic;
+    @NotNull
+    private Boolean isPeriodic;
 
     @Min(value = 1, message = "Repeat interval must be at least 1 day")
     @Max(value = 365, message = "Repeat interval cannot exceed 365 days")
-    @Null(message = "Repeat interval must be null if the transaction is not periodic")
     private Integer repeatInterval; // in days
 }

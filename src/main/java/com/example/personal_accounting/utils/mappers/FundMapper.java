@@ -20,7 +20,6 @@ public class FundMapper {
         responseDto.setGoalAmount(fund.getGoalAmount());
         responseDto.setCreatedAt(fund.getCreatedAt());
 
-        // Map user details
         User user = fund.getUser();
         if (user != null) {
             UserDto userDto = UserMapper.toDto(user);

@@ -3,6 +3,7 @@ package com.example.personal_accounting.services.LoanAndDeposit;
 import com.example.personal_accounting.dto.LoanAndDeposit.CreateLoanAndDepositDto;
 import com.example.personal_accounting.dto.LoanAndDeposit.LoanAndDepositDto;
 import com.example.personal_accounting.dto.LoanAndDeposit.PartialUpdateLoanAndDepositDto;
+import com.example.personal_accounting.dto.LoanAndDeposit.TotalAmountDto;
 import com.example.personal_accounting.models.Flyweight.LoanAndDepositFlyweight;
 import com.example.personal_accounting.models.Flyweight.LoanAndDepositFlyweightFactory;
 import com.example.personal_accounting.types.Type;
@@ -89,7 +90,7 @@ public class LoanAndDepositService {
     }
 
     @Transactional
-    public BigDecimal calculateTotalAmount(Long id) {
+    public TotalAmountDto calculateTotalAmount(Long id) {
         LoanAndDeposit loanAndDeposit = loanAndDepositRepository.findById(id)
                 .orElseThrow(() -> new LoanOrDepositNotFoundException("Loan/Deposit not found"));
 
@@ -104,14 +105,18 @@ public class LoanAndDepositService {
         BigDecimal rate = flyweight.getInterestRate();
         Type type = flyweight.getType();
 
+        BigDecimal totalAmount;
         if (type == Type.DEPOSIT) {
-            return calculator.calculateDeposit(principal, rate, days);
+            totalAmount = calculator.calculateDeposit(principal, rate, days);
         } else if (type == Type.LOAN) {
-            return calculator.calculateLoan(principal, rate, days);
+            totalAmount = calculator.calculateLoan(principal, rate, days);
         } else {
             throw new IllegalArgumentException("Unsupported type");
         }
+
+        return new TotalAmountDto(totalAmount);
     }
+
     public void save(LoanAndDeposit loanAndDeposit) {
         loanAndDepositRepository.save(loanAndDeposit);
     }

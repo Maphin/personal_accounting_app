@@ -39,7 +39,7 @@ public class Transaction {
     @Column()
     private LocalDate transactionDate;
 
-    @Column()
+    @Column(nullable = false)
     private Boolean isPeriodic;
 
     @Column()
